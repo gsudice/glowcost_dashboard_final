@@ -1,18 +1,36 @@
 # Set up for Web Server via Nginx
 
-1. Establish server in Vultr by using the following links with instructions:
+## 1. Establish server in Vultr by using the following links with instructions:
 - Link to create account in Vultr if not already done: https://www.vultr.com/servers/ubuntu/
 - Link to create server: https://medium.com/wolf-crypto/how-to-setup-a-vps-on-vultr-d2811cb43bda
 
 Please note, pricing varies according to needs. For installation testing, choose cheapest pricing.
 
-2. If using VSCode, just SSH with root user as:
+## 2. If using VSCode, just SSH with root user as:
 - root@your.ip.address
 - pw for root provided by Vultr during initial purchase and setup of VPS.
 
-3. Once logged in via terminal, use the following tutorials to establish:
+## 3. Once logged in via terminal, use the following tutorials to establish:
 - Sudo user if not already done: https://www.digitalocean.com/community/tutorials/how-to-create-a-new-sudo-enabled-user-on-ubuntu
 -  Python upgrade - https://docs.vultr.com/how-to-install-python-and-pip-on-ubuntu-24-04
 * Please note, the upgrade is only to ensure environment that is set up has the most up-to-date python and you will require to setup a priority of which python to use on the main system (3.8 for Ubuntu 20.04) via the sudo update-alternatives --config python3.
 - Nginx install - https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
 - Serve flask application tutorial for plotly application initial setup: https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uwsgi-and-nginx-on-ubuntu-20-04
+
+## 4. Add SSH connection to Github repository and download files into app folder
+- Follow the instructions on the following link to create an ssh key within the server to establish connection to github account: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent?platform=linux
+- Add server's ssh new key to github: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
+- After having established the ssh key in your github profile, run *ssh -vT git@github.com* to establish a github connection. The created public key should be used and a message saying "You've successfully authenticated..." should display.
+- Clone this repository by running *git clone git@github.com:gsudice/glowcost_dashboard_final.git*. This will create a separate folder downloading all files.
+- Move files inside cloned repository folder to app's folder. Example for cosmicgsu app folder (setup during flask tutorial) and glowcost_dashboard_final folder would be: *cp -a ~/glowcost_dashboard_final/. ~/cosmicgsu/*
+
+## 5. Update wsgi.py file to reflect entry point file as app.py
+Follow the steps below:
+- cd ~/projectname/
+- source project_env_name/bin/activate
+- nano ~/projectname/wsgi.py
+- change import statement as *from app import app*, then exit and save file changes.
+
+## 6. Install necessary libraries and test run app
+- *pip install -r requirements.txt*
+- 

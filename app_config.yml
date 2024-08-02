@@ -1,7 +1,7 @@
 DASH_APP:
   APP_TITLE: Cosmic Ray Flux Measurement At GSU
   UPDATE_TITLE: Updating...
-  DEBUG: TRUE
+  DEBUG: FALSE
 
 DASH_THEME:
   THEME: LITERA
