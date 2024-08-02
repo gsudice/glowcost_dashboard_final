@@ -14,8 +14,9 @@ Please note, pricing varies according to needs. For installation testing, choose
 - Sudo user if not already done: https://www.digitalocean.com/community/tutorials/how-to-create-a-new-sudo-enabled-user-on-ubuntu
 -  Python upgrade - https://docs.vultr.com/how-to-install-python-and-pip-on-ubuntu-24-04
 * Please note, the upgrade is only to ensure environment that is set up has the most up-to-date python and you will require to setup a priority of which python to use on the main system (3.8 for Ubuntu 20.04) via the sudo update-alternatives --config python3.
-- Nginx install - https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
+- Nginx install - https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04. Please note, server blocks is not needed as that will be addressed on the tutorial to be followed after.
 - Serve flask application tutorial for plotly application initial setup: https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uwsgi-and-nginx-on-ubuntu-20-04
+* After reaching installation of gunicorn flask, you must download github instead of creating files according to tutorial. Follow item 4 instructions.
 
 ## 4. Add SSH connection to Github repository and download files into app folder
 - Follow the instructions on the following link to create an ssh key within the server to establish connection to github account: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent?platform=linux
@@ -24,13 +25,17 @@ Please note, pricing varies according to needs. For installation testing, choose
 - Clone this repository by running *git clone git@github.com:gsudice/glowcost_dashboard_final.git*. This will create a separate folder downloading all files.
 - Move files inside cloned repository folder to app's folder. Example for cosmicgsu app folder (setup during flask tutorial) and glowcost_dashboard_final folder would be: *cp -a ~/glowcost_dashboard_final/. ~/cosmicgsu/*
 
-## 5. Update wsgi.py file to reflect entry point file as app.py
+## 5. Install necessary libraries and test run app
+- *pip install -r requirements.txt*
+
+## 6. Return to flask tutorial
+- Allow for port to access site by using *sudo ufw allow 5000*
+- Run *python app.py*
+
+## 7. Update wsgi.py file to reflect entry point file as app.py
 Follow the steps below:
 - cd ~/projectname/
 - source project_env_name/bin/activate
 - nano ~/projectname/wsgi.py
 - change import statement as *from app import app*, then exit and save file changes.
 
-## 6. Install necessary libraries and test run app
-- *pip install -r requirements.txt*
-- 

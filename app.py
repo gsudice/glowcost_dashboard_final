@@ -536,6 +536,5 @@ def toggle_navbar_collapse(n, is_open):
 
     # return children_analysis, children_cumsum, children_consistency
 
-
 if __name__ == "__main__":
-    app.run_server(debug=DEBUG)
+    app.run_server(host='0.0.0.0')
