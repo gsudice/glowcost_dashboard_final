@@ -1,0 +1,40 @@
+.navbar-toggler {
+    border-color:rgb(255, 95, 0);
+}
+
+.navbar-toggler:focus {
+    color:rgb(255, 95, 0)
+}
+
+.navbar-toggler-icon {
+    background-image: url(
+        "data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 95, 0, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E"
+    );
+}
+
+.nav-link:focus {
+    color: rgb(255, 95, 0);
+}
+
+.nav-link {
+    text-align: center;
+    max-height: 100%;
+}
+
+@media screen and (min-width: 30em){        
+    .col-extra {
+       display: none;
+    }
+    .container-navbar {
+        display: center;
+    }
+}
+
+@media screen and (max-width:50em) {
+    /* .nav-link {
+        text-align: left;
+    } */
+    .col-navbar {
+        align-self: center;
+    }
+}

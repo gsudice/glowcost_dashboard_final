@@ -1,0 +1,12 @@
+.home-img {
+    display:flex;
+    width:50%;
+    max-inline-size: 100%;
+    block-size: auto;
+    object-fit: contain;
+    min-width: 20em;
+}
+
+.div-description {
+    min-width: 30em;
+}
