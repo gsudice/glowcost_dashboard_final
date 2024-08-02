@@ -1,3 +1,9 @@
+# COSMIC RAY MEASUREMENTS WEBAPP PROJECT FOR GSU'S PHYSICS GROUP AT GSU
+
+This project entails the creation and setup of a database and server to develop and maintain a web application to provide access to data pertaining the Nuclear Physics Group led by Dr. Xiachun He, Ph.D.
+
+The project will spam all summer and is expected to be finished by the end of August 2024.
+
 # Set up for Web Server via Nginx
 
 ## 1. Establish server in Vultr by using the following links with instructions:
@@ -28,11 +34,15 @@ Please note, pricing varies according to needs. For installation testing, choose
 ## 5. Install necessary libraries and test run app
 - *pip install -r requirements.txt*
 
-## 6. Return to flask tutorial
+## 6. Mapbox token setup
+The current version of the app is unfinished and requires the creation of a free profile with MapBox to use the interactive map feature within the "Detectors" page. Please go to https://plotly.com/python/scattermapbox/#mapbox-access-token-and-base-map-configuration to learn more about obtaining your own access token for the application to work in your IDE. 
+- Create a .env file as *nano ~/cosmicgsu/.env* and create a variable *MAPBOX_TOKEN='your_token"
+- Save and exit file.
+
+## 7. Return to flask tutorial and finalize access
 - Allow for port to access site by using *sudo ufw allow 5000*
 - Run *python app.py*. This should trigger the localhost to open and display the application.
 - Create wsgi.py file using *nano ~/projectname/wsgi.py* as per the tutorial with a slight modification on import statement:
 *from myproject import app* -> *from myproject import server as app*
 - Configure gunicorn: *gunicorn --bind 0.0.0.0:5000 wsgi:app*
 - Access landing page as http://your_server_ip:5000.
-
