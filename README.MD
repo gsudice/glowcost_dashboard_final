@@ -15,7 +15,7 @@ Please note, pricing varies according to needs. For installation testing, choose
 -  Python upgrade - https://docs.vultr.com/how-to-install-python-and-pip-on-ubuntu-24-04
 * Please note, the upgrade is only to ensure environment that is set up has the most up-to-date python and you will require to setup a priority of which python to use on the main system (3.8 for Ubuntu 20.04) via the sudo update-alternatives --config python3.
 - Nginx install - https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04. Please note, server blocks is not needed as that will be addressed on the tutorial to be followed after.
-- Serve flask application tutorial for plotly application initial setup: https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uwsgi-and-nginx-on-ubuntu-20-04
+- Serve flask application tutorial for plotly application initial setup: https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04
 * After reaching installation of gunicorn flask, you must download github instead of creating files according to tutorial. Follow item 4 instructions.
 
 ## 4. Add SSH connection to Github repository and download files into app folder
@@ -30,12 +30,9 @@ Please note, pricing varies according to needs. For installation testing, choose
 
 ## 6. Return to flask tutorial
 - Allow for port to access site by using *sudo ufw allow 5000*
-- Run *python app.py*
-
-## 7. Update wsgi.py file to reflect entry point file as app.py
-Follow the steps below:
-- cd ~/projectname/
-- source project_env_name/bin/activate
-- nano ~/projectname/wsgi.py
-- change import statement as *from app import app*, then exit and save file changes.
+- Run *python app.py*. This should trigger the localhost to open and display the application.
+- Create wsgi.py file using *nano ~/projectname/wsgi.py* as per the tutorial with a slight modification on import statement:
+*from myproject import app* -> *from myproject import server as app*
+- Configure gunicorn: *gunicorn --bind 0.0.0.0:5000 wsgi:app*
+- Access landing page as http://your_server_ip:5000.
 
