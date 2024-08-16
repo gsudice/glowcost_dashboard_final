@@ -1,0 +1,12 @@
+wheel
+gunicorn
+flask
+pyyaml
+python-box
+dash
+pandas
+dash-bootstrap-components
+dash-svg
+plotly
+python-dotenv
+matplotlib

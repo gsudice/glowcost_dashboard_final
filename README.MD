@@ -18,11 +18,11 @@ Please note, pricing varies according to needs. For installation testing, choose
 
 ## 3. Once logged in via terminal, use the following tutorials to establish:
 - Sudo user if not already done: https://www.digitalocean.com/community/tutorials/how-to-create-a-new-sudo-enabled-user-on-ubuntu
--  Python upgrade - https://docs.vultr.com/how-to-install-python-and-pip-on-ubuntu-24-04
-* Please note, the upgrade is only to ensure environment that is set up has the most up-to-date python and you will require to setup a priority of which python to use on the main system (3.8 for Ubuntu 20.04) via the sudo update-alternatives --config python3.
 - Nginx install - https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04. Please note, server blocks is not needed as that will be addressed on the tutorial to be followed after.
 - Serve flask application tutorial for plotly application initial setup: https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04
 * After reaching installation of gunicorn flask, you must download github instead of creating files according to tutorial. Follow item 4 instructions.
+-  Python upgrade - https://docs.vultr.com/how-to-install-python-and-pip-on-ubuntu-24-04
+* Please note, the upgrade is only to ensure environment setup has the most up-to-date python and you will require to setup a priority of which python to use on the main system (3.8 for Ubuntu 20.04) via the sudo update-alternatives --config python3.
 
 ## 4. Add SSH connection to Github repository and download files into app folder
 - Follow the instructions on the following link to create an ssh key within the server to establish connection to github account: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent?platform=linux

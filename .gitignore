@@ -4,3 +4,7 @@ venv
 .DS_Store
 *.pyc
 *.txt
+*.sh
+
+# Dont ignore this file
+!requirements.txt
