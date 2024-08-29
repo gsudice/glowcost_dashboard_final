@@ -23,11 +23,8 @@ def connect_to_db():
     DBPWRD=getenv('DBPWRD')
 
     try:
-        conn = create_engine(
-            url="postgresql+psycopg2://{0}:{1}@{2}:{3}/{4}".format(
-                DBUSER, DBPWRD, DBHOST, DBPORT, DBNAME
-            )
-        )
+        connection_string = f'postgresql+psycopg2://{DBUSER}:{DBPWRD}@{DBHOST}:{DBPORT}/{DBNAME}'
+        conn = create_engine(connection_string)
 
         print('Connected to muon database successfully')
         return conn

@@ -4,7 +4,8 @@ flask
 pyyaml
 python-box
 dash
-pandas
+pandas==2.2.2
+sqlalchemy==2.0.32
 dash-bootstrap-components
 dash-svg
 plotly

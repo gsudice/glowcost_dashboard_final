@@ -75,7 +75,7 @@ def update_graph(clickData, n_clicks, state):
         # by returning a dash component
         if button_id == 'map_plot':
             
-            fig = pyfigure.update_detector_figure(detector_name)
+            fig = pyfigure.update_detector_figure(detector_name, detector)
         
         # If current input is from toggle clicks, change graph for same current detector
         elif button_id == 'toggle-moving-average':
@@ -83,7 +83,7 @@ def update_graph(clickData, n_clicks, state):
             n_clicks = int(n_clicks)
 
             if n_clicks % 2 == 0:
-                fig = pyfigure.update_detector_figure(detector_name)
+                fig = pyfigure.update_detector_figure(detector_name, detector)
             else:
                 fig = pyfigure.update_moving_average_figure(detector_name)
 
@@ -107,7 +107,7 @@ def update_graph(clickData, n_clicks, state):
             ),
             title = f'Data for {detector} Detector Not Available at This Time. Try again.'
             style = {'display':'none'}
-
+        
         return [
             title, 
             detector_graph, 
