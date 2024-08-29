@@ -113,7 +113,7 @@ HTML_NAVBAR = dbc.Navbar(
                     [
                         dbc.NavItem(dbc.NavLink('Home', href='/')),
                         dbc.NavItem(dbc.NavLink('Detectors', href='/detectors')),
-                        dbc.NavItem(dbc.NavLink('Liquid Scintillator', href='/scintillator')),
+                        # dbc.NavItem(dbc.NavLink('Liquid Scintillator', href='/scintillator')),
                         dbc.NavItem(dbc.NavLink('Collaborators', href='/collaborators')),
                         dbc.NavItem(dbc.NavLink('External Links', href='/external-links')),
                         dbc.NavItem(dbc.NavLink('Contact', href='/contact')),

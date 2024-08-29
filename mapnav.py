@@ -13,22 +13,18 @@ def map_display():
     if exists('app_data/detector_locations.csv'):
 
         df = pd.read_csv('app_data/detector_locations.csv')
-        site_lat = df.lat
-        site_lon = df.lon
-        locations_name = df.text
 
         fig = go.Figure()
-
         fig.add_trace(go.Scattermapbox(
-                lat=site_lat,
-                lon=site_lon,
+                text=df.name,
+                lat=df.lat,
+                lon=df.long,
                 mode='markers',
                 marker=go.scattermapbox.Marker(
                     size=10,
                     color='rgb(255, 159, 102)',
                     opacity=0.7
                 ),
-                text=locations_name,
             ))
 
         fig.update_layout(
