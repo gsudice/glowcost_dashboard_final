@@ -174,11 +174,15 @@ HTML_DATA_HISTORY = html.Div(
 # Container display for map
 HTML_MAPNAV = html.Div(
     [   
-        html.H2("Detector Location's Worldwide", className="float fw-bold text-center",),
+        html.H2(
+            "Detector Location's Worldwide", 
+            className="float fw-bold text-center",
+            style={'padding':'0px 0px 20px 0px'},
+        ),
         dcc.Graph(figure=map_display(), id='map_plot', style={'height':300})
     ],
     id='div-mapnav',
-    style={'padding':'80px 20px 80px 20px'},
+    style={'padding':'100px 20px 20px 20px'},
 )
 
 
@@ -187,13 +191,18 @@ HTML_GRAPHS = html.Div(
     [
         html.Div(
             [
-                html.H4(
+                html.H5(
                     'Click detectors on the map to display real time data below',
                     className="float fw-bold text-center",
-                    id='h2-graph-title'
+                    id='h-graph-title'
                 ),
+                html.H5(
+                    id='h-warnings',
+                    className="float text-center",
+                    style={'color':'red', 'paddingTop':10},
+                )
             ],
-            style={'paddingTop': 10, 'paddingBottom':10}
+            style={'paddingTop': 10, 'paddingBottom':50, 'color':'dimgray'}
         ),
         html.Div(
             [

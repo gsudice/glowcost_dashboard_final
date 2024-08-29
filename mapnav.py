@@ -15,9 +15,9 @@ def map_display():
     load_dotenv()
     mapbox_access_token = os.getenv('MAPBOX_TOKEN')
 
-    if exists('app_data/monitor_locations.csv'):
+    if exists('detector_info_settings/detector_locations.csv'):
 
-        df = pd.read_csv('app_data/monitor_locations.csv', sep=',', header=0)
+        df = pd.read_csv('detector_info_settings/detector_locations.csv', sep=',', header=0)
 
         fig = go.Figure()
         fig.add_trace(go.Scattermapbox(

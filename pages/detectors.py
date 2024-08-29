@@ -42,7 +42,7 @@ Returns:
 '''
 @callback(
     [
-        # Output('h2-graph-title', 'children'),
+        Output('h-warnings', 'children'),
         Output('load-graph','children'),
         Output('toggle-moving-average', 'style'),
         Output("btn-download-24", 'style'),
@@ -64,13 +64,18 @@ def update_graph(clickData, n_clicks, state):
 
         # Extract detector name and use to display graph
         detector = clickData['points'][0]['text']
-        print('button name: ', button_id, 'detector: ', detector)
+        # print('button name: ', button_id, 'detector: ', detector)
+        # Format detector name to lowercase and check formatting of name 
+        # doesn't have number up front
+        detector_name = detector.lower()
+        if detector_name.startswith('2') or detector_name.startswith('4'):
+            detector_name = detector_name[1:]+detector_name[0]
 
         # Update graph to replace empty graph figure or current graph
         # by returning a dash component
         if button_id == 'map_plot':
             
-            fig = pyfigure.update_detector_figure(detector)
+            fig = pyfigure.update_detector_figure(detector_name)
         
         # If current input is from toggle clicks, change graph for same current detector
         elif button_id == 'toggle-moving-average':
@@ -78,9 +83,9 @@ def update_graph(clickData, n_clicks, state):
             n_clicks = int(n_clicks)
 
             if n_clicks % 2 == 0:
-                fig = pyfigure.update_detector_figure(detector)
+                fig = pyfigure.update_detector_figure(detector_name)
             else:
-                fig = pyfigure.update_moving_average_figure(detector)
+                fig = pyfigure.update_moving_average_figure(detector_name)
 
         # Notify user if graph can be reproduced via title change and 
         # Set up additional buttons for display accordingly
@@ -90,7 +95,7 @@ def update_graph(clickData, n_clicks, state):
                         # Initial empty graph display bf user selects detector
                         figure=fig,
             ),
-            # title = f'{detector} Real Time Detector Data'
+            title = None
             style = {}
         else:
             # In case data is not available, revert to empty figure display
@@ -100,11 +105,11 @@ def update_graph(clickData, n_clicks, state):
                         figure=pyfigure.generate_empty_figure(),
                         config={'staticPlot':True},
             ),
-            # title = f'{detector} Real Time Detector Data Not Available at This Time'
+            title = f'Data for {detector} Detector Not Available at This Time. Try again.'
             style = {'display':'none'}
 
         return [
-            # title, 
+            title, 
             detector_graph, 
             style, 
             style, 

@@ -7,7 +7,7 @@ This file contains important settings for each monitor data including:
     - what 'timezone' is assigned to each monitor for localization before making into UTC
     - what frequency 'freq' does the data coming from the monitor have (usually every minute)
 '''
-monitor_settings = {
+detector_settings = {
         '2Paddle': {'splits':3, 'counts_val':1, 'counts_col':0, 'date_col':3, 'timezone':'America/New_York', 'freq':'1min'}, 
         '4Paddle': {'splits':3, 'counts_val':1, 'counts_col':0, 'date_col':3, 'timezone':'America/New_York', 'freq':'1min'},
         'MarkV': {'splits':3, 'counts_val':1, 'counts_col':0, 'date_col':3, 'timezone':'America/New_York', 'freq':'1min'},

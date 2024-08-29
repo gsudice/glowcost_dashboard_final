@@ -9,6 +9,9 @@ import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import plotly.express as px
 from os.path import exists
+from database import connect_to_db
+from datetime import datetime, timedelta, timezone
+from sqlalchemy import text
 
 LABEL_GRAPH_DETECTOR = {
     "title": "<b>Detector</b>",
@@ -16,6 +19,26 @@ LABEL_GRAPH_DETECTOR = {
     "xaxis": {"title": "<b>Date</b>"},
     "legend": {"title": "Percentages"},
 }
+
+def format_sql(sql_data):
+    ''' 
+    Formats sql data fetched from table into datetime and numeric columns
+
+    '''
+    print('Formatting SQL Data')
+    print('Data: ', type(sql_data[0]), sql_data[0])
+    # CSV file into a dataframe and format to have datetime and numeric columns
+    df = pd.DataFrame(sql_data)
+    print('DF: ', type(df), df == None or df.empty)
+    print(type(df['date'], type(df['count'])))
+    # df["date"] = pd.to_datetime(df['date'])
+    # df['date'] = df['date'].dt.tz_convert('UTC') # convert time zone to UTC
+    df = df.set_index('date')
+    print(df)
+    print('Done!')
+    # df["counts"] = df["counts"].apply(pd.to_numeric)
+    return df
+
 
 def generate_empty_figure(text: str= '', size: int = 40):
     '''
@@ -63,7 +86,66 @@ def generate_empty_figure(text: str= '', size: int = 40):
     )
     return go.Figure(data, layout)
 
+
 def update_detector_figure(detector_name):
+    '''
+    Generates graph figure based on provided detector data
+    
+    Args:       - detector_name (str): Name of detector for which data is being retrieved
+
+    Returns:    - px.line figure: An plotly express figure showing glowcost data
+
+    '''
+    # Get current time
+    # today = datetime.now(timezone.utc)
+    # year_ago = str(today - timedelta(days=365))
+
+    # Extract table from db
+    try:
+        print(f'Attempting to fetch data for monitor {detector_name}')
+        db = connect_to_db()
+        conn = db.connect()
+        query = text(f'SELECT * FROM {detector_name}')
+        result = conn.execute(query)
+        data = result.fetchall()
+        
+        # Format data into pandas df
+        df = format_sql(data)
+        # Close connection
+        db.close()
+
+        print(f'{detector_name} detector data fetched successfully')
+        # print(df)
+        
+        # Convert the date column to datetime format
+        # df['date'] = pd.to_datetime(df['date'])
+
+        # # Create a figure using Plotly Express
+        # fig = px.line(
+        #     df, 
+        #     x='date', 
+        #     y=['counts'],
+        # )
+
+        # fig.update_layout(
+        #     title = {
+        #         'text': f'{detector_name} : Real Time Cosmic Muon Monitor (Updated Daily)',
+        #         'x':0.5,
+        #         'y':0.9,
+        #         'xanchor':'center',
+        #         'yanchor':'top',
+        #         'font_color':"#002379",
+        #         'font_size':20
+        #     }
+        # )
+
+        return None #fig
+    
+    except:
+        print('Data fetch failed')
+        return None
+
+def update_detector_figure2(detector_name):
     '''
     Generates graph figure based on provided detector data
     
