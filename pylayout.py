@@ -178,7 +178,7 @@ HTML_MAPNAV = html.Div(
         dcc.Graph(figure=map_display(), id='map_plot', style={'height':300})
     ],
     id='div-mapnav',
-    style={'padding':'50px 20px 50px 20px'},
+    style={'padding':'80px 20px 80px 20px'},
 )
 
 

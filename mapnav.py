@@ -1,18 +1,23 @@
 import plotly.graph_objects as go
-from dash import html
 import pandas as pd
 from dotenv import load_dotenv
 import os
 from os.path import exists
+import plotly.express as px
+
 
 def map_display():
+    ''' 
+    Creates a map via the mapbox graph_objects library that displays the geolocation of each
+    monitor/sensor contained in a given csv file. This will output on an html container.
 
+    '''
     load_dotenv()
     mapbox_access_token = os.getenv('MAPBOX_TOKEN')
 
-    if exists('app_data/detector_locations.csv'):
+    if exists('app_data/monitor_locations.csv'):
 
-        df = pd.read_csv('app_data/detector_locations.csv')
+        df = pd.read_csv('app_data/monitor_locations.csv', sep=',', header=0)
 
         fig = go.Figure()
         fig.add_trace(go.Scattermapbox(
@@ -25,6 +30,7 @@ def map_display():
                     color='rgb(255, 159, 102)',
                     opacity=0.7
                 ),
+                cluster=dict(enabled=True),
             ))
 
         fig.update_layout(
@@ -42,7 +48,7 @@ def map_display():
                     lon=-94
                 ),
                 pitch=0,
-                zoom=3,
+                zoom=1,
                 style='light'
             ),
         )
