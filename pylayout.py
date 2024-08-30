@@ -174,12 +174,35 @@ HTML_DATA_HISTORY = html.Div(
 # Container display for map
 HTML_MAPNAV = html.Div(
     [   
+        html.Div(
+            [
+                dbc.Button(
+                    'Display Two Detectors',
+                    id='btn-dual-detector',
+                    n_clicks=0,
+                    color = 'success',
+                    outline=True,
+                    class_name='text-center',
+                    size='sm',
+                ),
+            ],
+            style={'paddingBottom':10},
+            className='d-md-flex justify-content-end',
+        ),
         html.H2(
             "Detector Location's Worldwide", 
             className="float fw-bold text-center",
             style={'padding':'0px 0px 20px 0px'},
         ),
-        dcc.Graph(figure=map_display(), id='map_plot', style={'height':300})
+        html.Div(
+            [
+                dcc.Graph(
+                    figure=map_display(), 
+                    id='map-plot', 
+                    style={'height':250}
+                ),
+            ],
+        )
     ],
     id='div-mapnav',
     style={'padding':'100px 20px 20px 20px'},
@@ -206,22 +229,6 @@ HTML_GRAPHS = html.Div(
         ),
         html.Div(
             [
-                html.Div(
-                    [
-                        dbc.Button(
-                            'Toggle Moving Average',
-                            id='toggle-moving-average',
-                            n_clicks=0,
-                            style = {'display':'none'},
-                            color = 'success',
-                            outline=False,
-                            class_name='text-center',
-                            size='md',
-                        ),
-                    ],
-                    className='d-md-flex justify-content-end',
-                ),
-                # Contains graph with data from detector
                 dcc.Loading(
                     id = 'load-graph',
                     children = dcc.Graph(
@@ -231,14 +238,29 @@ HTML_GRAPHS = html.Div(
                         config={'staticPlot':True},
                     )
                 ),
+                # Only shows if user wants dual display
+                # ontains graph with data from second detector
+                html.Div(
+                    dcc.Loading(
+                        id = 'load-graph2',
+                        children = dcc.Graph(
+                            id='graph-detector-display2',
+                            # Initial empty graph display bf user selects detector
+                            figure=pyfigure.generate_empty_figure(),
+                            config={'staticPlot':True},
+                        ),
+                    ),
+                    id='div-dual-detector',
+                    style={'display':'none'},
+                ),
             ],
         ),
         # Buttons for downloading data that become visible when user clicks on map detector
         html.Div(
             [
                 dbc.Button(
-                    "Download Data for Last 24h", 
-                    id="btn-download-24", 
+                    "Download Data for Last 30 Days", 
+                    id="btn-download-30", 
                     style = {'display':'none'},
                     color = 'secondary',
                     outline=False,
@@ -265,12 +287,225 @@ HTML_GRAPHS = html.Div(
                     ),
                 dcc.Download(id="download_df_csv"),
             ],
-            style={'padding': '50px 0px 50px 0px'},
+            style={'padding': '0px 0px 50px 0px'},
             className='gap-5 d-md-flex justify-content-center',
+        ),
+        html.H5(
+            id='download-warnings',
+            className="float text-center",
+            style={'color':'red', 'paddingTop':10}
         ),
     ],
     id='div-detector-graph',
 )
+
+# Container display for map
+HTML_DUAL_DET = html.Div(
+    [
+        html.Div(
+            [
+                dbc.Button(
+                    'Display Two Detectors',
+                    id='btn-dual-detector',
+                    n_clicks=0,
+                    # style = {'display':'none'},
+                    color = 'success',
+                    outline=True,
+                    class_name='text-center',
+                    size='md',
+                ),
+            ],
+            style={'paddingTop': 10, 'paddingRight':20, 'paddingBottom':10},
+            className='d-md-flex justify-content-end',
+        ),
+        html.H2(
+            "Detector Location's Worldwide", 
+            className="float fw-bold text-center",
+            style={'padding':'0px 0px 20px 0px'},
+        ),
+        # Det 1 Row
+        dbc.Row(
+            [   dbc.Col(
+                    html.H5(
+                        "Choose Detector 1",
+                        className="float fw-bold text-center",
+                        style={'padding':'0px 0px 20px 0px'},
+                    ),
+                ),
+                dbc.Col(),
+                dbc.Col(),
+                dbc.Col(),
+            ],
+        ),
+        dbc.Row(
+            [   
+                # Map for det 1
+                dbc.Col(
+                    [
+                        
+                        dcc.Graph(
+                            figure=map_display(), 
+                            id='map-plot', 
+                            style={'height':200}
+                        ),
+                    ],
+                    width=3
+                ),
+                # Graph for det 1
+                dbc.Col(
+                    [
+                        html.H5(
+                            id='h-warnings',
+                            className="float text-center",
+                            style={'color':'red'},
+                        ),
+                        dcc.Loading(
+                            id = 'load-graph',
+                            children = dcc.Graph(
+                                id='graph-detector-display',
+                                # Initial empty graph display bf user selects detector
+                                figure=pyfigure.generate_empty_figure(),
+                                config={'staticPlot':True},
+                            )
+                        ),
+                    ],
+                ),
+            ],
+        ),
+        # Det 2 Row
+        dbc.Row(
+            [   dbc.Col(
+                    html.H5(
+                        "Choose Detector 2",
+                        className="float fw-bold text-center",
+                        style={'padding':'0px 0px 20px 0px'},
+                    ),
+                ),
+                dbc.Col(),
+                dbc.Col(),
+                dbc.Col(),
+            ],
+        ),
+        dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        dcc.Graph(
+                            figure=map_display(), 
+                            id='map-plot2', 
+                            style={'height':200}
+                        ),
+                    ],
+                    width=3
+                ),
+                # Graph for det 2
+                dbc.Col(
+                    [
+                        html.H5(
+                            id='h-warnings2',
+                            className="float text-center",
+                            style={'color':'red', 'paddingTop':10},
+                        ),
+                        dcc.Loading(
+                            id = 'load-graph2',
+                            children = dcc.Graph(
+                                id='graph-detector-display',
+                                # Initial empty graph display bf user selects detector
+                                figure=pyfigure.generate_empty_figure(),
+                                config={'staticPlot':True},
+                            )
+                        ),
+                    ],
+                ),
+            ],
+        ),
+        # Det 1 Download buttons
+        html.Div(
+            [   
+                html.H5('Detector 1 Downloads'),
+                dbc.Button(
+                    "Download Data for Last 30 Days", 
+                    id="btn-download-30", 
+                    style = {'display':'none'},
+                    color = 'secondary',
+                    outline=False,
+                    class_name='text-center',
+                    size='md',
+                ),
+                dbc.Button(
+                    "Download Moving Average Data", 
+                    id="btn-download-mov", 
+                    style = {'display':'none'},
+                    color = 'secondary',
+                    outline=False,
+                    class_name='text-center',
+                    size='md',
+                ),
+                dbc.Button(
+                    "Download All Data", 
+                    id="btn-download-all", 
+                    style = {'display':'none'},
+                    color = 'secondary',
+                    outline=False,
+                    class_name='text-center',
+                    size='md',
+                    ),
+                dcc.Download(id="download_df_csv"),
+            ],
+            style={'padding': '0px 0px 50px 0px'},
+            className='gap-5 d-md-flex justify-content-center',
+        ),
+        html.H5(
+            id='download-warnings',
+            className="float text-center",
+            style={'color':'red', 'paddingTop':10}
+        ),
+        # Det 2 downloads
+        html.Div(
+            [   
+                html.H5('Detector 2 Downloads'),
+                dbc.Button(
+                    "Download Data for Last 30 Days", 
+                    id="btn-download-30", 
+                    style = {'display':'none'},
+                    color = 'secondary',
+                    outline=False,
+                    class_name='text-center',
+                    size='md',
+                ),
+                dbc.Button(
+                    "Download Moving Average Data", 
+                    id="btn-download-mov", 
+                    style = {'display':'none'},
+                    color = 'secondary',
+                    outline=False,
+                    class_name='text-center',
+                    size='md',
+                ),
+                dbc.Button(
+                    "Download All Data", 
+                    id="btn-download-all", 
+                    style = {'display':'none'},
+                    color = 'secondary',
+                    outline=False,
+                    class_name='text-center',
+                    size='md',
+                    ),
+                dcc.Download(id="download_df_csv"),
+            ],
+            style={'padding': '0px 0px 50px 0px'},
+            className='gap-5 d-md-flex justify-content-center',
+        ),
+        html.H5(
+            id='download-warnings',
+            className="float text-center",
+            style={'color':'red', 'paddingTop':10}
+        ),
+    ],
+    id='div-dual-det',
+    style={'padding':'80px 20px 50px 20px'},                        
+)
+
 
 HTML_ROW_OPTIONS_GRAPH_RAINFALL = html.Div(
     dbc.Container(

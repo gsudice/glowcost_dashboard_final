@@ -1,19 +1,26 @@
 import dash
-from dash import callback, Input, Output, State, dcc, ctx
+from dash import callback, html, Input, Output, State, dcc, ctx
 import dash_bootstrap_components as dbc
 import pylayout
 from os.path import exists
 dash.register_page(__name__)
 import pandas as pd
-from pathlib import Path
 import pyfigure
-from data_downloads import download_csvs
+from datetime import datetime, timedelta, timezone
+from io import StringIO
 
 layout = dbc.Container(
     [
-        pylayout.HTML_MAPNAV,
-        pylayout.HTML_GRAPHS,
+        html.Div(
+            children= [   
+                pylayout.HTML_MAPNAV,
+                pylayout.HTML_GRAPHS,
+            ],
+            id='div-det-display'
+        ),
         pylayout.HTML_DATA_HISTORY,
+        dcc.Store(id='graph1-df'),
+        dcc.Store(id='graph2-df'),
     ],
     fluid=True,
     className="dbc",
@@ -23,6 +30,43 @@ layout = dbc.Container(
         # between page and browser on top
     },
 )
+''' 
+Callback to display two detector graphs instead of one
+
+Args:       - int 0 or 1 depending if user clicked button
+
+Returns:     - Tuple [
+                    html.Button text object,
+                    dcc.Button style dictionary,
+                    dcc.Button style dictionary,
+                ]
+'''
+@callback(
+    [
+        Output('btn-dual-detector', 'children'),
+        Output('div-det-display', 'children'),
+    ],
+    Input('btn-dual-detector', 'n_clicks'),
+    prevent_initial_call=True,
+)
+def dual_detector(n_clicks):
+    if n_clicks:
+        # Cast string clicks into int number
+        n_clicks = int(n_clicks)
+
+        if n_clicks % 2 == 0:
+            content='Display One Detector'
+            style1={'height':250}
+            style2={}
+        else:
+            content='Display Two Detectors'
+            style1={'height':250, 'display':'none'}
+            style2={'display':'none'}
+
+        return [content, pylayout.HTML_DUAL_DET]
+    else:
+        return dash.no_update
+
 
 ''' 
 Callback for displaying graphs of selected detector data on multiple
@@ -37,24 +81,22 @@ Returns:
             dcc.Button style dictionary,
             dcc.Button style dictionary,
             dcc.Button style dictionary,
-            dcc.Button style dictionary,
         ]
 '''
 @callback(
     [
         Output('h-warnings', 'children'),
         Output('load-graph','children'),
-        Output('toggle-moving-average', 'style'),
-        Output("btn-download-24", 'style'),
+        Output('graph1-df', 'data'),
+        Output("btn-download-30", 'style'),
         Output("btn-download-mov", 'style'),
         Output("btn-download-all", 'style'),
     ],
-    Input('map_plot','clickData'),
-    Input('toggle-moving-average', 'n_clicks'),
-    State('map_plot', 'map'),
+    Input('map-plot','clickData'),
+    State('map-plot', 'map'),
     prevent_initial_call=True
 )
-def update_graph(clickData, n_clicks, state):
+def update_graph(clickData, state):
 
     # Extract id of current input being used
     button_id = ctx.triggered_id if not None else 'No clicks yet'
@@ -73,19 +115,9 @@ def update_graph(clickData, n_clicks, state):
 
         # Update graph to replace empty graph figure or current graph
         # by returning a dash component
-        if button_id == 'map_plot':
+        if button_id == 'map-plot':
             
-            fig = pyfigure.update_detector_figure(detector_name, detector)
-        
-        # If current input is from toggle clicks, change graph for same current detector
-        elif button_id == 'toggle-moving-average':
-            # Cast string clicks into int number
-            n_clicks = int(n_clicks)
-
-            if n_clicks % 2 == 0:
-                fig = pyfigure.update_detector_figure(detector_name, detector)
-            else:
-                fig = pyfigure.update_moving_average_figure(detector_name, detector)
+            fig, data_df = pyfigure.update_detector_figure(detector_name, detector)
 
         # Notify user if graph can be reproduced via title change and 
         # Set up additional buttons for display accordingly
@@ -95,6 +127,8 @@ def update_graph(clickData, n_clicks, state):
                         # Initial empty graph display bf user selects detector
                         figure=fig,
             ),
+            json_data = data_df.to_json()
+            
             title = None
             style = {}
         else:
@@ -110,11 +144,11 @@ def update_graph(clickData, n_clicks, state):
         
         return [
             title, 
-            detector_graph, 
+            detector_graph,
+            json_data,
             style, 
             style, 
             style, 
-            style
         ]
     # else, no update occurs
     return dash.no_update
@@ -128,24 +162,65 @@ Returns:    - csv file
 
 '''
 @callback(
+    Output('download-warnings', 'children'),
     Output('download_df_csv', 'data'),
-    Input("btn-download-24", 'n_clicks'),
-    Input("btn-download-mov", 'n_clicks'),
-    Input("btn-download-all", 'n_clicks'),
+    [   
+        Input('graph1-df','data'),
+        Input("btn-download-30", 'n_clicks'),
+        Input("btn-download-mov", 'n_clicks'),
+        Input("btn-download-all", 'n_clicks'),
+    ],
     State('load-graph', 'children'),
     prevent_initial_call=True,
 )
-def download_csv(btn24, btnmov, btnall, state):
+def download_csv(json_data, btn24, btnmov, btnall, state):
 
     # If a button has been clicked extract id of current input being used
     button_id = ctx.triggered_id if not None else 'No clicks yet'
-    # Retrieve detector of choice
-    detector = state[0]['props']['figure']['layout']['title']['text'].strip().split(':')[0].strip()
-    # Get DF and filename
-    df, filename = download_csvs(detector, button_id)
-    # Return a csv for download
-    return dcc.send_data_frame(df.to_csv, filename)
+    
+    # List of buttons for sorting task
+    download_buttons = ["btn-download-30", "btn-download-mov", "btn-download-all"]
+    
+    if button_id in download_buttons:
+        text = None
+        # Retrieve detector name
+        detector_name = state[0]['props']['figure']['layout']['title']['text'].strip().split(':')[0].strip()
 
+        # Read json data from dcc.Store
+        df = pd.read_json(StringIO(json_data))
+        print(df.iloc[0].name)
+        print(type(df.iloc[0].name))
+
+        # Trim based on request
+        if button_id == "btn-download-all":
+            final_df = df
+            filename = f'{detector_name}_all_data.csv'
+
+        elif button_id == "btn-download-30":
+            # Get current datetime and 30 days prior
+            today = datetime.now()
+            day30 = today - timedelta(30)
+
+            # Slice df
+            final_df = df.loc[:day30]
+
+            filename = f'{detector_name}_30days_data.csv'
+
+        else: # button_id == "btn-download-mov":
+            # Slice df
+            final_df = df.loc[:,'hourly_average']
+            filename = f'{detector_name}_hourly_moving_ave_data.csv'
+
+        if final_df.empty:
+            final_df = None
+            filename = ''
+            text = f'Unable to download data'
+
+        # Return a csv for download
+        return [text, dcc.send_data_frame(final_df.to_csv, filename)]
+    
+    else:
+        return dash.no_update
 
 
 ''' 
