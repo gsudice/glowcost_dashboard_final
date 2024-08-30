@@ -85,7 +85,7 @@ def update_graph(clickData, n_clicks, state):
             if n_clicks % 2 == 0:
                 fig = pyfigure.update_detector_figure(detector_name, detector)
             else:
-                fig = pyfigure.update_moving_average_figure(detector_name)
+                fig = pyfigure.update_moving_average_figure(detector_name, detector)
 
         # Notify user if graph can be reproduced via title change and 
         # Set up additional buttons for display accordingly

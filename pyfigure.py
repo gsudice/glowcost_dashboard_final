@@ -87,11 +87,90 @@ def update_detector_figure(detector_name, og_detector_name):
     Returns:    - px.line figure: An plotly express figure showing glowcost data
 
     '''
-    # Get current time
-    # today = datetime.now(timezone.utc)
-    # year_ago = str(today - timedelta(days=365))
+
 
     # Extract table from db
+    try:
+        # print(f'Attempting to fetch data for monitor {detector_name}')
+        db = connect_to_db()
+        print(detector_name)
+        with db.connect() as conn:
+            query = text(f'SELECT * FROM {detector_name}')
+            result = conn.execute(query)
+            data = result.fetchall()
+            conn.close()
+            # Format data into pandas df
+            df = format_sql(data)
+
+        # Close connection
+        db.dispose()
+
+        df = df.set_index('date')
+
+        # Calculate hourly moving average
+        df['hourly_average'] = df['counts'].rolling(window='24h').mean()
+
+        # Create a figure
+        fig = go.Figure(
+            [   # Offline
+                go.Scatter(
+                    x=df.index,
+                    y=df['counts'],
+                    name='Offline',
+                    line=dict(dash='dash', color='red', width=0.5),
+                    connectgaps=True
+                ),
+                # Raw Muon counts
+                go.Scatter(
+                    x=df.index,
+                    y=df['counts'],
+                    name='Hourly Muon Counts',
+                    line=dict(color='red', width=2)
+                ),
+                # Hourly average
+                go.Scatter(
+                    x=df.index,
+                    y=df['hourly_average'],
+                    name='Hourly Counts Moving Ave.',
+                    line=dict(color='blue', width=2)
+                ),
+            ]
+        )
+
+        fig.update_layout(
+            title = {
+                'text': f'{og_detector_name} : Real Time Cosmic Muon Monitor (Updated Daily)',
+                'x':0.5,
+                'y':0.9,
+                'xanchor':'center',
+                'yanchor':'top',
+                'font_color':"#002379",
+                'font_size':20
+            }
+        )
+
+        return fig
+    
+    except:
+        print('Data fetch failed')
+        return None
+
+
+
+
+def update_moving_average_figure(detector_name, og_detector_name):
+    '''
+    Generates graph figure based on provided detector data
+    based on the toggle button's request for the last 24 hours
+
+    Args:
+        detector_name (str): Name of detector for which data is being retrieved
+    
+    Returns:
+        px.line figure: An plotly express figure showing glowcost data
+
+    '''
+    # # Extract table from db
     # try:
     # print(f'Attempting to fetch data for monitor {detector_name}')
     db = connect_to_db()
@@ -106,103 +185,31 @@ def update_detector_figure(detector_name, og_detector_name):
 
     # Close connection
     db.dispose()
+    df = df.set_index('date')
+    # Calculate hourly moving average
+    df['hourly_average'] = df['counts'].rolling(window='24h').mean()
+    print(df.iloc[:50])
 
+    # # Create a figure of the moving average data using Plotly Express
+    # fig_hr_avg = px.line(
+    #     df_last_day, 
+    #     x='date', 
+    #     y=['One_hourly_avg', 'Two_hourly_avg', 'Three_hourly_avg'],
+    #     title=f'{detector_name} : Hourly Moving Average of Muon Data',
+    # )
+    # fig_hr_avg.update_layout(
+    #     title = {
+    #         'text': f'{detector_name} : Hourly Moving Average of Muon Data',
+    #         'x':0.5,
+    #         'y':0.9,
+    #         'xanchor':'center',
+    #         'yanchor':'top',
+    #         'font_color':"#002379",
+    #         'font_size':20
+    #     }
+    # )
 
-    # Create a figure
-    fig = go.Figure(
-        [
-            go.Scatter(
-                x=df['date'],
-                y=df['counts'],
-                name='Offline',
-                line=dict(dash='dash', color='red'),
-                connectgaps=True
-            ),
-            go.Scatter(
-                x=df['date'],
-                y=df['counts'],
-                name='Hourly Muon Counts',
-                line=dict(color='red')
-            ),
-        ]
-    )
-
-    fig.update_layout(
-        title = {
-            'text': f'{og_detector_name} : Real Time Cosmic Muon Monitor (Updated Daily)',
-            'x':0.5,
-            'y':0.9,
-            'xanchor':'center',
-            'yanchor':'top',
-            'font_color':"#002379",
-            'font_size':20
-        }
-    )
-
-    return fig
+    # return fig_hr_avg
     
-    # except:
-    #     print('Data fetch failed')
-    #     return None
-
-
-
-
-def update_moving_average_figure(detector_name):
-    '''
-    Generates graph figure based on provided detector data
-    based on the toggle button's request for the last 24 hours
-
-    Args:
-        detector_name (str): Name of detector for which data is being retrieved
-    
-    Returns:
-        px.line figure: An plotly express figure showing glowcost data
-
-    '''
-
-    # Read the CSV file into a pandas DataFrame
-    if exists(f"detector_data_test/{detector_name}-2022-05-15-to-2022-08-26.csv"):
-        
-        df = pd.read_csv(f"detector_data_test/{detector_name}-2022-05-15-to-2022-08-26.csv")
-
-        # Convert the date column to datetime format
-        df['date'] = pd.to_datetime(df['date'])
-
-
-
-        # ***** THIS NEEDS TO BE CHANGED ******
-
-        # Slice the DataFrame to include only the last day of data 
-        df_last_day = df[-1440:]
-
-        # ***** THIS NEEDS TO BE CHANGED ******
-
-        # Create an hourly moving average of the data
-        df_last_day['One_hourly_avg'] = df_last_day['One'].rolling(window=24).mean()
-        df_last_day['Two_hourly_avg'] = df_last_day['Two'].rolling(window=24).mean()
-        df_last_day['Three_hourly_avg'] = df_last_day['Three'].rolling(window=24).mean()
-
-        # Create a figure of the moving average data using Plotly Express
-        fig_hr_avg = px.line(
-            df_last_day, 
-            x='date', 
-            y=['One_hourly_avg', 'Two_hourly_avg', 'Three_hourly_avg'],
-            title=f'{detector_name} : Hourly Moving Average of Muon Data',
-        )
-        fig_hr_avg.update_layout(
-            title = {
-                'text': f'{detector_name} : Hourly Moving Average of Muon Data',
-                'x':0.5,
-                'y':0.9,
-                'xanchor':'center',
-                'yanchor':'top',
-                'font_color':"#002379",
-                'font_size':20
-            }
-        )
-
-        return fig_hr_avg
-    
-    # If no data found
+    # # If no data found
     return None
