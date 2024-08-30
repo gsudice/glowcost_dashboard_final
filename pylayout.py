@@ -174,21 +174,6 @@ HTML_DATA_HISTORY = html.Div(
 # Container display for map
 HTML_MAPNAV = html.Div(
     [   
-        html.Div(
-            [
-                dbc.Button(
-                    'Display Two Detectors',
-                    id='btn-dual-detector',
-                    n_clicks=0,
-                    color = 'success',
-                    outline=True,
-                    class_name='text-center',
-                    size='sm',
-                ),
-            ],
-            style={'paddingBottom':10},
-            className='d-md-flex justify-content-end',
-        ),
         html.H2(
             "Detector Location's Worldwide", 
             className="float fw-bold text-center",
@@ -205,7 +190,7 @@ HTML_MAPNAV = html.Div(
         )
     ],
     id='div-mapnav',
-    style={'padding':'100px 20px 20px 20px'},
+    style={'padding':'20px 20px 20px 20px'},
 )
 
 
@@ -287,7 +272,7 @@ HTML_GRAPHS = html.Div(
                     ),
                 dcc.Download(id="download_df_csv"),
             ],
-            style={'padding': '0px 0px 50px 0px'},
+            style={'padding': '50px 0px 50px 0px'},
             className='gap-5 d-md-flex justify-content-center',
         ),
         html.H5(
@@ -302,22 +287,6 @@ HTML_GRAPHS = html.Div(
 # Container display for map
 HTML_DUAL_DET = html.Div(
     [
-        html.Div(
-            [
-                dbc.Button(
-                    'Display Two Detectors',
-                    id='btn-dual-detector',
-                    n_clicks=0,
-                    # style = {'display':'none'},
-                    color = 'success',
-                    outline=True,
-                    class_name='text-center',
-                    size='md',
-                ),
-            ],
-            style={'paddingTop': 10, 'paddingRight':20, 'paddingBottom':10},
-            className='d-md-flex justify-content-end',
-        ),
         html.H2(
             "Detector Location's Worldwide", 
             className="float fw-bold text-center",
@@ -331,6 +300,7 @@ HTML_DUAL_DET = html.Div(
                         className="float fw-bold text-center",
                         style={'padding':'0px 0px 20px 0px'},
                     ),
+                    style={'padding':'20px 0px 0px 0px'}
                 ),
                 dbc.Col(),
                 dbc.Col(),
@@ -349,6 +319,7 @@ HTML_DUAL_DET = html.Div(
                             style={'height':200}
                         ),
                     ],
+                    style={'padding':'50px 0px 0px 0px'},
                     width=3
                 ),
                 # Graph for det 1
@@ -380,6 +351,7 @@ HTML_DUAL_DET = html.Div(
                         className="float fw-bold text-center",
                         style={'padding':'0px 0px 20px 0px'},
                     ),
+                    style={'padding':'40px 0px 0px 0px'}
                 ),
                 dbc.Col(),
                 dbc.Col(),
@@ -396,6 +368,7 @@ HTML_DUAL_DET = html.Div(
                             style={'height':200}
                         ),
                     ],
+                    style={'padding':'50px 0px 0px 0px'},
                     width=3
                 ),
                 # Graph for det 2
@@ -409,7 +382,7 @@ HTML_DUAL_DET = html.Div(
                         dcc.Loading(
                             id = 'load-graph2',
                             children = dcc.Graph(
-                                id='graph-detector-display',
+                                id='graph-detector-display-2',
                                 # Initial empty graph display bf user selects detector
                                 figure=pyfigure.generate_empty_figure(),
                                 config={'staticPlot':True},
@@ -452,13 +425,13 @@ HTML_DUAL_DET = html.Div(
                     ),
                 dcc.Download(id="download_df_csv"),
             ],
-            style={'padding': '0px 0px 50px 0px'},
+            style={'padding': '40px 0px 30px 0px'},
             className='gap-5 d-md-flex justify-content-center',
         ),
         html.H5(
             id='download-warnings',
             className="float text-center",
-            style={'color':'red', 'paddingTop':10}
+            style={'color':'red', 'paddingTop':10, 'paddingBottom':30}
         ),
         # Det 2 downloads
         html.Div(
@@ -466,7 +439,7 @@ HTML_DUAL_DET = html.Div(
                 html.H5('Detector 2 Downloads'),
                 dbc.Button(
                     "Download Data for Last 30 Days", 
-                    id="btn-download-30", 
+                    id="btn-download-30-2", 
                     style = {'display':'none'},
                     color = 'secondary',
                     outline=False,
@@ -475,7 +448,7 @@ HTML_DUAL_DET = html.Div(
                 ),
                 dbc.Button(
                     "Download Moving Average Data", 
-                    id="btn-download-mov", 
+                    id="btn-download-mov-2", 
                     style = {'display':'none'},
                     color = 'secondary',
                     outline=False,
@@ -484,26 +457,26 @@ HTML_DUAL_DET = html.Div(
                 ),
                 dbc.Button(
                     "Download All Data", 
-                    id="btn-download-all", 
+                    id="btn-download-all-2", 
                     style = {'display':'none'},
                     color = 'secondary',
                     outline=False,
                     class_name='text-center',
                     size='md',
                     ),
-                dcc.Download(id="download_df_csv"),
+                dcc.Download(id="download_df_csv-2"),
             ],
             style={'padding': '0px 0px 50px 0px'},
             className='gap-5 d-md-flex justify-content-center',
         ),
         html.H5(
-            id='download-warnings',
+            id='download-warnings-2',
             className="float text-center",
             style={'color':'red', 'paddingTop':10}
         ),
     ],
     id='div-dual-det',
-    style={'padding':'80px 20px 50px 20px'},                        
+    style={'padding':'20px 20px 50px 20px'},                        
 )
 
 

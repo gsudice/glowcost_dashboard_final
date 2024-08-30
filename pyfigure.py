@@ -57,7 +57,7 @@ def generate_empty_figure(text: str= '', size: int = 40):
                 "showarrow": False,
             }
         ],
-        height=200,
+        height=300,
     )
     return go.Figure(data, layout)
 
@@ -121,12 +121,14 @@ def update_detector_figure(detector_name, og_detector_name):
             title = {
                 'text': f'{og_detector_name} : Real Time Cosmic Muon Monitor (Updated Daily)',
                 'x':0.5,
-                'y':0.9,
+                'y':0.99,
                 'xanchor':'center',
                 'yanchor':'top',
                 'font_color':"#002379",
                 'font_size':15
-            }
+            },
+            height=280,
+            margin=dict(l=0, r=0, t=25, b=0),
         )
 
         return fig, df
