@@ -6,6 +6,7 @@ python-box
 dash
 pandas==2.2.2
 sqlalchemy==2.0.32
+psycopg2-binary
 dash-bootstrap-components
 dash-svg
 plotly

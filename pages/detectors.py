@@ -6,7 +6,7 @@ from os.path import exists
 dash.register_page(__name__)
 import pandas as pd
 import pyfigure
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from io import StringIO
 
 layout = dbc.Container(

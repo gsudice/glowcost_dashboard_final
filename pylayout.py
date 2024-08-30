@@ -175,7 +175,7 @@ HTML_DATA_HISTORY = html.Div(
 HTML_MAPNAV = html.Div(
     [   
         html.H2(
-            "Detector Location's Worldwide", 
+            "Detector Locations Worldwide", 
             className="float fw-bold text-center",
             style={'padding':'0px 0px 20px 0px'},
         ),
