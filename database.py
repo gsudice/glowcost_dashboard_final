@@ -4,14 +4,22 @@ File with all necessary functions for data download from server
 
 '''
 import pandas as pd
-import numpy as np
 from dotenv import load_dotenv
 from os import getenv
-from detector_info_settings.detector_format_settings import detector_settings
-from datetime import date, timedelta
 from sqlalchemy import create_engine
-import psycopg2
 
+
+def format_sql(sql_data):
+    ''' 
+    Formats sql data fetched from table into datetime index and numeric column
+    Args:       sql_data -> sqlalchemy row.Row object
+    Returns:    pandas df
+
+    '''
+    # CSV file into a dataframe
+    df = pd.DataFrame(sql_data)
+    df = df.set_index('date')
+    return df
 
 def connect_to_db():
     # Extract environment variables
@@ -23,11 +31,8 @@ def connect_to_db():
     DBPWRD=getenv('DBPWRD')
 
     try:
-        conn = create_engine(
-            url="postgresql+psycopg2://{0}:{1}@{2}:{3}/{4}".format(
-                DBUSER, DBPWRD, DBHOST, DBPORT, DBNAME
-            )
-        )
+        connection_string = f'postgresql+psycopg2://{DBUSER}:{DBPWRD}@{DBHOST}:{DBPORT}/{DBNAME}'
+        conn = create_engine(connection_string)
 
         print('Connected to muon database successfully')
         return conn
