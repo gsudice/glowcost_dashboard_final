@@ -18,7 +18,7 @@ detector_settings = {
         'ColomboV2': {'splits':5, 'counts_val':1, 'counts_col':2,  'date_col':5, 'timezone':'Asia/Colombo', 'freq':'1min'},
         'OneParkPlace': {'splits':5, 'counts_val':1, 'counts_col':2, 'date_col':5, 'timezone':'America/New_York', 'freq':'1min'},
         'Rm415_Muon001': {'splits':3, 'counts_val':1, 'counts_col':0, 'date_col':3, 'timezone':'America/New_York', 'freq':'1min'},
-        'SantaMarta': {'splits':3, 'counts_val':1, 'counts_col':0, 'date_col':3, 'timezone':'America/Los_Angeles', 'freq':'1min'},
+        'SantaMarta': {'splits':3, 'counts_val':1, 'counts_col':0, 'date_col':3, 'timezone':'America/Bogota', 'freq':'1min'},
         'Serbia_BelgradeDet1':{'splits':4, 'counts_val':1, 'counts_col':1, 'date_col':4, 'timezone':'Europe/Belgrade', 'freq':'1min'},
         'Serbia_BelgradeDet2':{'splits':4, 'counts_val':1, 'counts_col':1, 'date_col':4, 'timezone':'Europe/Belgrade', 'freq':'1min'},
         'UvaWellassa_Muon001':{'splits':11, 'counts_val':1, 'counts_col':4, 'date_col':0, 'timezone':'Asia/Colombo', 'freq':'1min'},

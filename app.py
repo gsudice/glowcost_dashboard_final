@@ -3,17 +3,14 @@ from dash import Dash, html
 import dash
 import dash_bootstrap_components as dbc
 from dash_svg import Svg, G, Path
-from pyconfig import appConfig
+# from pyconfig import appConfig
 import pylayout
 
-
 # Dash app config
-APP_TITLE = appConfig.DASH_APP.APP_TITLE
-UPDATE_TITLE = appConfig.DASH_APP.UPDATE_TITLE
-DEBUG = appConfig.DASH_APP.DEBUG
-
-# Web app theme selection
-THEME = appConfig.DASH_THEME.THEME
+APP_TITLE = 'Global CosmicRay Network for Space Weather Monitoring and STEM Outreach'
+UPDATE_TITLE = 'Updating...'
+DEBUG = 'TRUE'
+THEME = 'LITERA' # Web app theme selection
 
 # App initiation
 app = Dash(

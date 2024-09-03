@@ -9,42 +9,46 @@ import pyfigure
 from datetime import datetime, timedelta
 from io import StringIO
 
-layout = dbc.Container(
-    [
-        html.Div(
-            [
-                dbc.Button(
-                    'Display Two Detectors',
-                    id='btn-dual-detector',
-                    n_clicks=0,
-                    color = 'success',
-                    outline=True,
-                    class_name='text-center',
-                    size='md',
-                ),
-            ],
-            style={'paddingTop': 50, 'paddingRight':20, 'paddingBottom':0},
-            className='d-md-flex justify-content-end',
-        ),
-        html.Div(
-            children= [   
-                pylayout.HTML_MAPNAV,
-                pylayout.HTML_GRAPHS,
-            ],
-            id='div-det-display'
-        ),
-        pylayout.HTML_DATA_HISTORY,
-        dcc.Store(id='graph1-df'),
-        dcc.Store(id='graph2-df'),
-    ],
-    fluid=True,
-    className="dbc",
-    style={
-        "padding": "0px 0px 0px 0px", 
-        'margin':"0px 0px 0px 0px" # Quick fix: Need to figure out why random space 
-        # between page and browser on top
-    },
-)
+def serve_layout():
+    return dbc.Container(
+        [
+            html.Div(
+                [
+                    dbc.Button(
+                        'Display Two Detectors',
+                        id='btn-dual-detector',
+                        n_clicks=0,
+                        color = 'success',
+                        outline=True,
+                        class_name='text-center',
+                        size='md',
+                    ),
+                ],
+                style={'paddingTop': 50, 'paddingRight':20, 'paddingBottom':0},
+                className='d-md-flex justify-content-end',
+            ),
+            html.Div(
+                children= [   
+                    pylayout.HTML_MAPNAV,
+                    pylayout.HTML_GRAPHS,
+                ],
+                id='div-det-display'
+            ),
+            pylayout.HTML_DATA_HISTORY,
+            dcc.Store(id='graph1-df'),
+            dcc.Store(id='graph2-df'),
+        ],
+        fluid=True,
+        className="dbc",
+        style={
+            "padding": "0px 0px 0px 0px", 
+            'margin':"0px 0px 0px 0px" # Quick fix: Need to figure out why random space 
+            # between page and browser on top
+        },
+    )
+
+
+layout = serve_layout()
 ''' 
 Callback to display two detector graphs instead of one
 
@@ -300,8 +304,8 @@ def download_csv(json_data, btn24, btnmov, btnall, state):
 
         # Read json data from dcc.Store
         df = pd.read_json(StringIO(json_data))
-        print(df.iloc[0].name)
-        print(type(df.iloc[0].name))
+        # print(df.iloc[0].name)
+        # print(type(df.iloc[0].name))
 
         # Trim based on request
         if button_id == "btn-download-all":
@@ -385,7 +389,7 @@ def download_csv(json_data, btn24, btnmov, btnall, state):
             day30 = today - timedelta(30)
 
             # Slice df
-            final_df = df.loc[:day30]
+            final_df = df.loc[day30:]
 
             filename = f'{detector_name}_30days_data.csv'
 
