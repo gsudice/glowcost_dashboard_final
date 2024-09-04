@@ -80,6 +80,7 @@ def update_detector_figure(detector_name, og_detector_name):
             query = text(f'SELECT * FROM {detector_name}')
             result = conn.execute(query)
             data = result.fetchall()
+            
             conn.close()
             # Format data into pandas df
             df = format_sql(data)
