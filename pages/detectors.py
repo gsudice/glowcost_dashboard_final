@@ -124,20 +124,13 @@ def update_graph(clickData, state):
 
         # Extract detector name and use to display graph
         detector = clickData['points'][0]['text']
-        # print('button name: ', button_id, 'detector: ', detector)
-        # Format detector name to lowercase and check formatting of name 
-        # doesn't have number up front
-        detector_name = detector.lower()
-        if detector_name.startswith('2') or detector_name.startswith('4'):
-            detector_name = detector_name[1:]+detector_name[0]
 
         # Update graph to replace empty graph figure or current graph
         # by returning a dash component
         if button_id == 'map-plot':
             
-            fig, data_df = pyfigure.update_detector_figure(detector_name, detector)
+            fig, data_df = pyfigure.update_detector_figure(detector)
 
-            
         # Notify user if graph can be reproduced via title change and 
         # Set up additional buttons for display accordingly
         if fig != None:
@@ -155,6 +148,7 @@ def update_graph(clickData, state):
             title = None
             style = {}
         else:
+            print('Fig is none')
             # In case data is not available, revert to empty figure display
             detector_graph = dcc.Graph(
                         id='graph-detector-display',

@@ -28,6 +28,7 @@ server = app.server
 
 
 # Layout creation based on container with various divs for sections of webpage
+# This one loads all pages and keeps consistent header and navbar
 app.layout = dbc.Container(
     [
         dbc.Row(

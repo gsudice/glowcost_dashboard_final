@@ -1,9 +1,7 @@
 """ 
 This module defines layout components for Dash application
 """
-
 from dash import html, dcc
-from pyconfig import appConfig
 import dash_bootstrap_components as dbc
 import pyfigure
 from mapnav import map_display
@@ -12,7 +10,7 @@ from mapnav import map_display
 HTML_TITLE = html.Div(
     [
         html.H4(
-            appConfig.DASH_APP.APP_TITLE,
+            'Global CosmicRay Network for Space Weather Monitoring and STEM Outreach',
             className="float fw-bold text-left fw-bold",
             style={"color":'white'},
         ),
@@ -58,23 +56,13 @@ HTML_FOOTER = html.Div(
     [
         html.Div(
             [
-                "Website created and maintained by graduate researchers ",
+                "Website development directed by ",
+                html.A("Chetan Tiwari, Ph.D.", href="https://cas.gsu.edu/profile/chetan-tiwari/"),
+                " and created and maintained by graduate researchers ",
                 html.A("Sara Edwards", href="https://github.com/Sedwards8900"),
                 " and ",
                 html.A("Jean Guo", href="https://github.com/tguo4"),
-                ",",
-            ],
-        ),
-        html.Div(
-            [
-                " directed by ",
-                html.A("Chetan Tiwari, Ph.D.", href="https://cas.gsu.edu/profile/chetan-tiwari/"),
-                ", Director of ",
-                html.A(
-                    "Disaster Informatics and Computational Epidemiology (DICE)", 
-                    href="https://gsudice.dataconn.net/"
-                ),
-                ' Lab.',
+                ".",
             ],
         ),
     ],
