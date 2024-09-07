@@ -2,6 +2,7 @@ import dash
 from dash import html
 from os.path import exists
 import dash_bootstrap_components as dbc
+import pylayout
 
 dash.register_page(__name__)
 
@@ -42,26 +43,34 @@ def generate_link(key_l, txt_l):
     return html.A(key_l, href=txt_l, target='_blank')
 
 # Set up layout
-layout = html.Div(
+layout = dbc.Container(
     [   
+        pylayout.HTML_HEADER2,
         html.Div(
             [
-                
-                html.H1('Cosmic Ray Data Links'),
-                html.Br(),
-                dbc.Row([generate_link(key_l, content[key_l]) for key_l in content]),
+                html.Div(
+                    [
+                        
+                        html.H3('Cosmic Ray Data Links'),
+                        html.Br(),
+                        dbc.Row([generate_link(key_l, content[key_l]) for key_l in content]),
+                    ],
+                    style={'padding':'0px 0px 50px 0px'},
+                ),
+                html.Hr(style = {'size' : '50', 'borderColor':'#332348','borderHeight': "10vh", "width": "95%",}),
+                html.Div(
+                    [
+                        html.H3('World Data Centers'),
+                        html.Br(),
+                        dbc.Row([generate_link(key_l, content2[key_l]) for key_l in content2]),
+                    ],
+                    style={'padding':'50px 0px 0px 0px'},
+                ),
             ],
-            style={'padding':'0px 0px 25px 0px'},
-        ),
-        html.Div(
-            [
-                html.H1('World Data Centers'),
-                html.Br(),
-                dbc.Row([generate_link(key_l, content2[key_l]) for key_l in content2]),
-            ],
-            style={'padding':'25px 0px 0px 0px'},
+            className='text-center',
+            style={'padding':'50px 10vh 50px 10vh'},
         ),
     ],
-    className='text-center',
-    style={'padding':'50px 10px 25px 10px'},
+    fluid=True,
+    className="dbc p-0 m-0",
 )

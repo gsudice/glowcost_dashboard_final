@@ -42,8 +42,7 @@ def generate_empty_figure(text: str= '', size: int = 40):
             "showticklabels": False,
             "zeroline": False,
         },
-        # margin={"t": 55, "l": 55, "r": 55, "b": 55},
-        margin={"t": 0, "l": 0, "r": 20, "b": 0},
+        margin={"t": 0, "l": 0, "r": 0, "b": 0},
         annotations=[
             {
                 "name": "text",
@@ -57,6 +56,7 @@ def generate_empty_figure(text: str= '', size: int = 40):
                 "showarrow": False,
             }
         ],
+        paper_bgcolor='rgb(229, 236, 246)',
         height=300,
     )
     return go.Figure(data, layout)

@@ -11,40 +11,42 @@ from io import StringIO
 
 def serve_layout():
     return dbc.Container(
-        [
+        [   
+            pylayout.HTML_HEADER2,
             html.Div(
                 [
-                    dbc.Button(
-                        'Display Two Detectors',
-                        id='btn-dual-detector',
-                        n_clicks=0,
-                        color = 'success',
-                        outline=True,
-                        class_name='text-center',
-                        size='md',
+                    html.Div(
+                        [
+                            dbc.Button(
+                                'Display Two Detectors',
+                                id='btn-dual-detector',
+                                n_clicks=0,
+                                color = 'success',
+                                outline=True,
+                                class_name='text-center',
+                                size='md',
+                            ),
+                        ],
+                        style={'paddingTop': 50, 'paddingRight':20, 'paddingBottom':0},
+                        className='d-md-flex justify-content-end',
                     ),
+                    html.Div(
+                        children= [   
+                            pylayout.HTML_MAPNAV,
+                            pylayout.HTML_GRAPHS,
+                        ],
+                        id='div-det-display'
+                    ),
+                    html.Hr(style = {'size' : '50', 'borderColor':'#332348','borderHeight': "10vh", "width": "95%",}),
+                    pylayout.HTML_DATA_HISTORY,
+                    dcc.Store(id='graph1-df'),
+                    dcc.Store(id='graph2-df'),
                 ],
-                style={'paddingTop': 50, 'paddingRight':20, 'paddingBottom':0},
-                className='d-md-flex justify-content-end',
+                style={'padding':'0px 8vw 50px 8vw'},
             ),
-            html.Div(
-                children= [   
-                    pylayout.HTML_MAPNAV,
-                    pylayout.HTML_GRAPHS,
-                ],
-                id='div-det-display'
-            ),
-            pylayout.HTML_DATA_HISTORY,
-            dcc.Store(id='graph1-df'),
-            dcc.Store(id='graph2-df'),
         ],
         fluid=True,
-        className="dbc",
-        style={
-            "padding": "0px 0px 0px 0px", 
-            'margin':"0px 0px 0px 0px" # Quick fix: Need to figure out why random space 
-            # between page and browser on top
-        },
+        className="dbc p-0 m-0",
     )
 
 
