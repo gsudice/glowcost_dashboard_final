@@ -20,6 +20,12 @@ def format_sql(sql_data):
     # CSV file into a dataframe
     df = pd.DataFrame(sql_data)
     df = df.set_index('date')
+    
+    columns_types = df.dtypes.to_list()
+    if len(set(columns_types)) > 1:
+        for col in df.columns.to_list():
+            df[col] = pd.to_numeric(df[col])
+            
     return df
 
 def connect_to_db():

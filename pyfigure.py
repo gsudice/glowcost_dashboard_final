@@ -107,13 +107,11 @@ def update_detector_figure(detector_name_og):
         print('tails: ', df.tail(1), wdf.tail(1))
 
         wdf = wdf.loc[df.head(1).index.values[0]:]
-        # print(wdf)
+        print(wdf)
         print('found: ')
         # print(wdf.loc[df.tail(1).index.values[0]])
-        # wdf = wdf.loc[:df.tail(1).index.values[0]]
-        # print(wdf)
-
-        # print('heads: ', df.head(1), wdf.head(1), '\n')
+        wdf = wdf.loc[:df.tail(1).index.values[0]]
+        print(wdf)
 
     # Close connection
     db.dispose()
