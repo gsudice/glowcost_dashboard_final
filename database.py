@@ -19,7 +19,15 @@ def format_sql(sql_data):
     '''
     # CSV file into a dataframe
     df = pd.DataFrame(sql_data)
+    df['date'] = pd.to_datetime(df['date'])
+        
+    # Make sure current table is on UTC format
+    print(df['date'].dt.tz)
+    if str(df['date'].dt.tz) != 'UTC':
+        df['date'] = df['date'].dt.tz_localize('UTC')
     df = df.set_index('date')
+
+    df.sort_index(ascending=True, inplace=True)
     
     columns_types = df.dtypes.to_list()
     if len(set(columns_types)) > 1:
