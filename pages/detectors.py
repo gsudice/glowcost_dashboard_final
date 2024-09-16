@@ -6,45 +6,51 @@ from os.path import exists
 dash.register_page(__name__)
 import pandas as pd
 import pyfigure
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from io import StringIO
 
-layout = dbc.Container(
-    [
-        html.Div(
-            [
-                dbc.Button(
-                    'Display Two Detectors',
-                    id='btn-dual-detector',
-                    n_clicks=0,
-                    color = 'success',
-                    outline=True,
-                    class_name='text-center',
-                    size='md',
-                ),
-            ],
-            style={'paddingTop': 50, 'paddingRight':20, 'paddingBottom':0},
-            className='d-md-flex justify-content-end',
-        ),
-        html.Div(
-            children= [   
-                pylayout.HTML_MAPNAV,
-                pylayout.HTML_GRAPHS,
-            ],
-            id='div-det-display'
-        ),
-        pylayout.HTML_DATA_HISTORY,
-        dcc.Store(id='graph1-df'),
-        dcc.Store(id='graph2-df'),
-    ],
-    fluid=True,
-    className="dbc",
-    style={
-        "padding": "0px 0px 0px 0px", 
-        'margin':"0px 0px 0px 0px" # Quick fix: Need to figure out why random space 
-        # between page and browser on top
-    },
-)
+def serve_layout():
+    return dbc.Container(
+        [   
+            pylayout.HTML_HEADER2,
+            html.Div(
+                [
+                    html.Div(
+                        [
+                            dbc.Button(
+                                'Display Two Detectors',
+                                id='btn-dual-detector',
+                                n_clicks=0,
+                                color = 'success',
+                                outline=True,
+                                class_name='text-center',
+                                size='md',
+                            ),
+                        ],
+                        style={'paddingTop': 50, 'paddingRight':20, 'paddingBottom':0},
+                        className='d-md-flex justify-content-end',
+                    ),
+                    html.Div(
+                        children= [   
+                            pylayout.HTML_MAPNAV,
+                            pylayout.HTML_GRAPHS,
+                        ],
+                        id='div-det-display'
+                    ),
+                    html.Hr(style = {'size' : '50', 'borderColor':'#332348','borderHeight': "10vh", "width": "95%",}),
+                    pylayout.HTML_DATA_HISTORY,
+                    dcc.Store(id='graph1-df'),
+                    dcc.Store(id='graph2-df'),
+                ],
+                style={'padding':'0px 8vw 50px 8vw'},
+            ),
+        ],
+        fluid=True,
+        className="dbc p-0 m-0",
+    )
+
+
+layout = serve_layout()
 ''' 
 Callback to display two detector graphs instead of one
 
@@ -120,20 +126,13 @@ def update_graph(clickData, state):
 
         # Extract detector name and use to display graph
         detector = clickData['points'][0]['text']
-        # print('button name: ', button_id, 'detector: ', detector)
-        # Format detector name to lowercase and check formatting of name 
-        # doesn't have number up front
-        detector_name = detector.lower()
-        if detector_name.startswith('2') or detector_name.startswith('4'):
-            detector_name = detector_name[1:]+detector_name[0]
 
         # Update graph to replace empty graph figure or current graph
         # by returning a dash component
         if button_id == 'map-plot':
             
-            fig, data_df = pyfigure.update_detector_figure(detector_name, detector)
+            fig, data_df = pyfigure.update_detector_figure(detector)
 
-            
         # Notify user if graph can be reproduced via title change and 
         # Set up additional buttons for display accordingly
         if fig != None:
@@ -151,6 +150,7 @@ def update_graph(clickData, state):
             title = None
             style = {}
         else:
+            print('Fig is none')
             # In case data is not available, revert to empty figure display
             detector_graph = dcc.Graph(
                         id='graph-detector-display',
@@ -300,8 +300,8 @@ def download_csv(json_data, btn24, btnmov, btnall, state):
 
         # Read json data from dcc.Store
         df = pd.read_json(StringIO(json_data))
-        print(df.iloc[0].name)
-        print(type(df.iloc[0].name))
+        # print(df.iloc[0].name)
+        # print(type(df.iloc[0].name))
 
         # Trim based on request
         if button_id == "btn-download-all":
@@ -385,7 +385,7 @@ def download_csv(json_data, btn24, btnmov, btnall, state):
             day30 = today - timedelta(30)
 
             # Slice df
-            final_df = df.loc[:day30]
+            final_df = df.loc[day30:]
 
             filename = f'{detector_name}_30days_data.csv'
 

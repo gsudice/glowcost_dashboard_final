@@ -10,3 +10,15 @@
 .div-description {
     min-width: 30em;
 }
+
+@media screen and (min-width: 600px){        
+    .intro-video {
+       width: 30vw;
+       height: 20vh;
+    }
+
+}
+
+.bglayer {
+    height:300px
+}

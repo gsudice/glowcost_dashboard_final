@@ -1,35 +1,121 @@
 """ 
 This module defines layout components for Dash application
 """
-
-from dash import html, dcc
-from pyconfig import appConfig
+from dash import html, dcc, get_asset_url
 import dash_bootstrap_components as dbc
 import pyfigure
 from mapnav import map_display
 
 # Create website main title
-HTML_TITLE = html.Div(
-    [
-        html.H4(
-            appConfig.DASH_APP.APP_TITLE,
-            className="float fw-bold text-left fw-bold",
-            style={"color":'white'},
+HTML_TITLE1 = html.Div(
+    [   dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        html.Div(
+                            [
+                                html.H3(
+                                    [
+                                        "Global CosmicRay Network",
+                                        html.Br(),
+                                        "for Space Weather Monitoring and STEM Outreach",
+                                    ],
+                                    className="float text-center",
+                                    style={"color":'white', 'min-width':'30vw'},
+                                ),
+                                html.Div(
+                                    [
+                                        "Bridging the Gap in Global Space Weather Monitoring"
+                                    ],
+                                    className="float text-center",
+                                    style={"color":'#89849b', 'min-width':'30vw'},
+                                ),
+                            ],
+                        ),
+                    ],
+                    
+                    id='col-title-name',
+                    style={
+                        'align-text':'center',
+                        'padding':'0px 0px 3vh 0px',
+                    }
+                ),
+                dbc.Col(
+                    [
+                        html.Div(
+                            [
+                                html.Iframe(
+                                    id='intro_video',
+                                    src="https://www.youtube.com/embed/ClRUcufp28E?si=42Dwl07dS9Miry72",
+                                    style={
+                                        'max-width':'90%',
+                                        'width':'70vw',
+                                        'height':'40vh',
+                                        'display':'block',
+                                        'margin':'auto',
+                                    },
+                                ),
+                            ],
+                            id='col-div-video'
+                        ),
+                    ],
+                    md=6,
+                    id='col-title-video',
+                ),  
+            ],
+            class_name='g-0',
+            align='center',
+            justify='center',
         ),
-        html.Span(
-            html.A(
-                ['More info about our research at GSU Research Magazine'],
-                href='https://news.gsu.edu/research-magazine/cosmic-rays-space-weather-and-larger-questions-about-the-universe',
-                target='_blank',
-            ),
-            className="text-muted",
-            style={'fontSize':'12px', 'padding-top':10}
-        ),
+        
     ],
     style={
-        # "background-color": '#002379', 
-        'padding':'40px 0px 20px 0px',
-        'margin': '0px 0px 0px 0px'
+        'padding':'10vh 10vw 10vh 10vw',
+        'margin': '0px 0px 0px 0px',
+    },
+    id='div-title',
+)
+
+HTML_TITLE2 = html.Div(
+    [   dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        html.Div(
+                            [
+                                html.H5(
+                                    [
+                                        "Global CosmicRay Network",
+                                        html.Br(),
+                                        "for Space Weather Monitoring and STEM Outreach",
+                                    ],
+                                    className="float text-left",
+                                    style={"color":'white', 'min-width':'30vw'},
+                                ),
+                            ],
+                        ),
+                    ],
+                    
+                    id='col-title-name',
+                    style={
+                        'align-text':'center',
+                        'padding':'0px 0px 0px 0px',
+                    }
+                ),
+                dbc.Col(
+                    md=6,
+                    id='col-title-2',
+                ),  
+            ],
+            class_name='g-0',
+            align='center',
+            justify='center',
+        ),
+        
+    ],
+    style={
+        'padding':'3vh 10vw 3vh 10vw',
+        'margin': '0px 0px 0px 0px',
     },
     id='div-title',
 )
@@ -58,23 +144,13 @@ HTML_FOOTER = html.Div(
     [
         html.Div(
             [
-                "Website created and maintained by graduate researchers ",
+                "Website development directed by ",
+                html.A("Chetan Tiwari, Ph.D.", href="https://cas.gsu.edu/profile/chetan-tiwari/"),
+                " and created and maintained by graduate researchers ",
                 html.A("Sara Edwards", href="https://github.com/Sedwards8900"),
                 " and ",
                 html.A("Jean Guo", href="https://github.com/tguo4"),
-                ",",
-            ],
-        ),
-        html.Div(
-            [
-                " directed by ",
-                html.A("Chetan Tiwari, Ph.D.", href="https://cas.gsu.edu/profile/chetan-tiwari/"),
-                ", Director of ",
-                html.A(
-                    "Disaster Informatics and Computational Epidemiology (DICE)", 
-                    href="https://gsudice.dataconn.net/"
-                ),
-                ' Lab.',
+                ".",
             ],
         ),
     ],
@@ -88,59 +164,182 @@ HTML_FOOTER = html.Div(
     }
 )
 
+
 HTML_NAVBAR = dbc.Navbar(
     dbc.Container(
         [   
             dbc.Row(
-                [
-                    dbc.Col(className='col-extra'),
+                [   dbc.Col(),
                     dbc.Col(
                         dbc.NavbarToggler(
                             id="navbar-toggler", 
                             n_clicks=0,
+                            style={'margin-left':'31%'},
                         ),
+                        id='col-navbar-toggler',
                     ),
-                    dbc.Col(className='col-extra'),
+                    dbc.Col(
+                        [   html.Div(
+                                [
+                                    dbc.Collapse(
+                                        dbc.Nav(
+                                            [
+                                                dbc.NavItem(dbc.NavLink('Home', href='/')),
+                                                dbc.NavItem(dbc.NavLink('Technology', href='/technology')),
+                                                dbc.NavItem(dbc.NavLink('Detectors', href='/detectors')),
+                                                # dbc.NavItem(dbc.NavLink('Liquid Scintillator', href='/scintillator')),
+                                                # dbc.NavItem(dbc.NavLink('Collaborators', href='/collaborators')),
+                                                dbc.NavItem(dbc.NavLink('External Links', href='/external-links', style={'white-space':'nowrap'},)),
+                                                dbc.NavItem(dbc.NavLink('Contact', href='/contact')),
+                                            ],
+                                        ),
+                                        id="navbar-collapse",
+                                        is_open=False,
+                                        navbar=True,
+                                        style={'min-width':'100%'}, # This forces navbar hyperlinks to be in single line
+                                        className='g-0',
+                                    ),
+                                ],
+                                id='div-inner-navbar',
+                            ),
+                        ],
+                        className='g-0',
+                        id='col-inner-navbar',
+                    ),
                 ],
-                className="g-0",
-            ),
-            # dbc.NavbarToggler(
-            #     id="navbar-toggler", 
-            #     n_clicks=0,
-            # ),
-            dbc.Collapse(
-                dbc.Nav(
-                    [
-                        dbc.NavItem(dbc.NavLink('Home', href='/')),
-                        dbc.NavItem(dbc.NavLink('Detectors', href='/detectors')),
-                        # dbc.NavItem(dbc.NavLink('Liquid Scintillator', href='/scintillator')),
-                        dbc.NavItem(dbc.NavLink('Collaborators', href='/collaborators')),
-                        dbc.NavItem(dbc.NavLink('External Links', href='/external-links')),
-                        dbc.NavItem(dbc.NavLink('Contact', href='/contact')),
-                    ],
-                ),
-                id="navbar-collapse",
-                is_open=False,
-                navbar=True,
-                style={
-                    'min-width':'60%',
-                }
+                className='g-0 m-0 p-0',
+                id='row-navbar',
+                align='center',
             ),
         ],
-        className='container-navbar',
-        style={
-            'padding':'6px 0px 0px 0px',
-        },
+        style={'padding':0, 'margin':0, 'width':'100%', 'max-width':'100%','display':'inline-block'},
+        id='dbc-container-navbar',
+        # fluid=True,
     ),
-    style={
-        'padding':'6px 0px 0px 0px', 
-    },
+    style={'align-items':'center', 'min-height':'15vh','max-height':'25vh'},
+    className='p-0 m-0',
     dark=True,
     color='transparent',
-    expand='md',
-    className='navbar-base'
+    expand='sm', # This determines when it expands or shortens into toggler
+    id="dbc-navbar-main",
 )
 
+HTML_NAVBAR2 = dbc.Navbar(
+    dbc.Container(
+        [   
+            dbc.Row(
+                [   dbc.Col(),
+                    dbc.Col(
+                        dbc.NavbarToggler(
+                            id="navbar-toggler", 
+                            n_clicks=0,
+                            style={'margin-left':'31%'},
+                        ),
+                        id='col-navbar-toggler',
+                    ),
+                    dbc.Col(
+                        [   html.Div(
+                                [
+                                    dbc.Collapse(
+                                        dbc.Nav(
+                                            [
+                                                dbc.NavItem(dbc.NavLink('Home', href='/')),
+                                                dbc.NavItem(dbc.NavLink('Technology', href='/technology')),
+                                                dbc.NavItem(dbc.NavLink('Detectors', href='/detectors')),
+                                                # dbc.NavItem(dbc.NavLink('Liquid Scintillator', href='/scintillator')),
+                                                # dbc.NavItem(dbc.NavLink('Collaborators', href='/collaborators')),
+                                                dbc.NavItem(dbc.NavLink('External Links', href='/external-links', style={'white-space':'nowrap'},)),
+                                                dbc.NavItem(dbc.NavLink('Contact', href='/contact')),
+                                            ],
+                                        ),
+                                        id="navbar-collapse",
+                                        is_open=False,
+                                        navbar=True,
+                                        style={'min-width':'100%'}, # This forces navbar hyperlinks to be in single line
+                                        className='g-0',
+                                    ),
+                                ],
+                                id='div-inner-navbar',
+                            ),
+                        ],
+                        className='g-0',
+                        id='col-inner-navbar',
+                    ),
+                ],
+                className='g-0 m-0 p-0',
+                id='row-navbar',
+                align='center',
+            ),
+        ],
+        style={'padding':0, 'margin':0, 'width':'100%', 'max-width':'100%','display':'inline-block'},
+        id='dbc-container-navbar',
+        # fluid=True,
+    ),
+    style={'align-items':'center', 'min-height':'3vh','max-height':'5vh'},
+    className='p-0 m-0',
+    dark=True,
+    color='transparent',
+    expand='sm', # This determines when it expands or shortens into toggler
+    id="dbc-navbar-main",
+)
+
+HTML_SVG = html.Div(
+    style={
+        'padding':'0px 0px 0px 0px',
+        'margin':'0px 0px -2vh 0px',
+        "background-image": "url('assets/bg-header-wave.svg')",
+        "background-repeat":'no-repeat',
+        "min-height":"5vh",
+    }
+)
+
+HTML_HEADER1 = html.Div(
+    [
+        HTML_NAVBAR,
+        HTML_TITLE1,
+        HTML_SVG,
+        html.Div(
+            style={
+                'min-width':'100%',
+                'min-height':'1.2vh',
+                "background-color": '#f3f3f3',
+            }
+        ),
+    ],
+    id='div-header-styling-container',
+    className="g-0",
+    style={
+        'padding':'0px 0px 0px 0px',
+        'margin':'0px 0px 0px 0px',
+        "background-image": "url('assets/bg1.png')",
+        "background-repeat":'no-repeat',
+        "background-color": '#332348',
+    }
+)
+
+HTML_HEADER2 = html.Div(
+    [
+        HTML_TITLE2,
+        HTML_NAVBAR2,
+        HTML_SVG,
+        html.Div(
+            style={
+                'min-width':'100%',
+                'min-height':'1.2vh',
+                "background-color": '#f3f3f3',
+            }
+        ),
+    ],
+    id='div-header-styling-container',
+    className="g-0",
+    style={
+        'padding':'0px 0px 0px 0px',
+        'margin':'0px 0px 0px 0px',
+        "background-image": "url('assets/bg1.png')",
+        "background-repeat":'no-repeat',
+        "background-color": '#332348',
+    }
+)
 
 HTML_DATA_HISTORY = html.Div(
     [
@@ -175,7 +374,7 @@ HTML_DATA_HISTORY = html.Div(
 HTML_MAPNAV = html.Div(
     [   
         html.H2(
-            "Detector Location's Worldwide", 
+            "Detector Locations Worldwide", 
             className="float fw-bold text-center",
             style={'padding':'0px 0px 20px 0px'},
         ),
@@ -190,9 +389,20 @@ HTML_MAPNAV = html.Div(
         )
     ],
     id='div-mapnav',
-    style={'padding':'20px 20px 20px 20px'},
+    style={'padding':'20px 0px 20px 0px'},
 )
 
+HTML_MAPNAV2 = html.Div(
+    [   
+        dcc.Graph(
+            figure=map_display(), 
+            id='map-plot', 
+            style={'height':250}
+        ),
+    ],
+    id='div-mapnav',
+    style={'padding':'20px 20px 20px 20px'},
+)
 
 # Container display for graphs
 HTML_GRAPHS = html.Div(
@@ -221,24 +431,11 @@ HTML_GRAPHS = html.Div(
                         # Initial empty graph display bf user selects detector
                         figure=pyfigure.generate_empty_figure(),
                         config={'staticPlot':True},
-                    )
-                ),
-                # Only shows if user wants dual display
-                # ontains graph with data from second detector
-                html.Div(
-                    dcc.Loading(
-                        id = 'load-graph2',
-                        children = dcc.Graph(
-                            id='graph-detector-display2',
-                            # Initial empty graph display bf user selects detector
-                            figure=pyfigure.generate_empty_figure(),
-                            config={'staticPlot':True},
-                        ),
                     ),
-                    id='div-dual-detector',
-                    style={'display':'none'},
+                    className='p-0 m-0',
                 ),
             ],
+            className='p-0 m-0',
         ),
         # Buttons for downloading data that become visible when user clicks on map detector
         html.Div(

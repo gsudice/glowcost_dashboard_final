@@ -21,16 +21,13 @@
     max-height: 100%;
 }
 
-@media screen and (min-width: 30em){        
+@media screen and (min-width: 500px){        
     .col-extra {
        display: none;
     }
-    .container-navbar {
-        display: center;
-    }
 }
 
-@media screen and (max-width:50em) {
+@media screen and (max-width:450px) {
     /* .nav-link {
         text-align: left;
     } */
